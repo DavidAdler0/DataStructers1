@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -55,6 +56,7 @@ namespace ConsoleApp2
                     pointer = pointer.Next;
                 }
                 pointer.Next = newNode;
+                return;
 
             }
             Head = newNode;
@@ -64,57 +66,150 @@ namespace ConsoleApp2
 
             if (Head != null)
             {
-                string list = Head.Value.ToString();
+                string listToString = Head.Value.ToString();
                 Node pointer = Head;
 
                 while (pointer.Next != null)
                 {
                     pointer = pointer.Next;
-                    list += "->" + pointer.Value.ToString();
+                    listToString += " -> " + pointer.Value.ToString();
                 }
-                return list;
+                return listToString;
             }
             throw new Exception("List is empty");
         }
         public int Length()
         {
-            if (Head != null)
+            Node pointer = Head;
+            int length = 0;
+            while (pointer != null)
             {
-                int length = 1;
-                Node pointer = Head;
-
-                while (pointer.Next != null)
-                {
-                    pointer = pointer.Next;
-                    length++;
-                }
-                return length;
+                pointer = pointer.Next;
+                length++;
             }
-            return 0;
+            return length;
+
         }
         public void RemoveValue(int data)
         {
             if (Head != null)
             {
-                if (Head.Next == null)
+                if (Head.Next == null && Head.Value == data)
                 {
                     Head = null;
                     return;
                 }
                 Node pointer = Head;
-                if (pointer.Value == data)
-                    Node temp = pointer.;
                 while (pointer.Next != null)
                 {
-                    if (pointer.Value == data)
+                    if (pointer.Next.Value == data)
                     {
-
+                        if(pointer.Next.Next != null)
+                        {
+                            pointer.Next = pointer.Next.Next;
+                            return;
+                        }
+                        pointer.Next = null;
+                        return ;
                     }
                     pointer = pointer.Next;
                 }
-                return length;
             }
-            return 0;
+            throw new Exception("List is empty");
+
+
+        }
+        public void RemoveAllValues(int data)
+        {
+
+            while (Head != null && Head.Value == data)
+            {
+                Head = Head.Next;
+            }
+
+            Node current = Head;
+            while (current != null && current.Next != null)
+            {
+                if (current.Next.Value == data)
+                {
+                    current.Next = current.Next.Next;
+                }
+                else
+                {
+                    current = current.Next;
+                }
+            }
+        }
+        public void RemoveIndex(int data)
+        {
+            //int index = 0;
+            //Node pointer = Head;
+            //while ( pointer.Next != null )
+            //{
+            //    index++;
+            //    if (index == data)
+            //    {
+            //        pointer.Next = pointer.Next.Next;
+            //        return;
+            //    }
+
+
+            //}
+            if (Head != null)
+            {
+                if (data == 0)
+                    Head = Head.Next;
+                int index = 0;
+                Node pointer = Head;
+                while (pointer.Next != null)
+                {
+                    index++;
+                    if (index == data)
+                    {
+                        pointer.Next = pointer.Next.Next;
+                        return;
+                    }
+                    pointer = pointer.Next;
+                }
+                throw new Exception("no such givenIndex");
+
+            }
+            throw new Exception("List is empty");
+        }
+        // Method to find by value and return givenIndex
+        public int Find(int data)
+        {
+            Node Pointer = Head;
+            int index = -1;
+
+            while (Pointer != null)
+            {
+                index++;
+                if (Pointer.Value == data)
+                {
+                    return index;
+                }
+                Pointer = Pointer.Next;
+
+            }
+            throw new Exception("no such value");
+        }
+
+        // Method to get a value by  givenIndex and return the value
+        public int Get(int givenIndex)
+        {
+            Node pointer = Head;
+            int index = -1;
+            while ( pointer != null )
+            {
+                index++;
+                if (index == givenIndex)
+                {
+                    return pointer.Value;
+                }
+                pointer = pointer.Next;
+            }
+            throw new Exception($"no item at index {givenIndex}");
         }
 
     }
